@@ -17,7 +17,7 @@
     "sunnah",
     "llm-tools"
   ],
-  "author": "أحمد الطبراني (Ahmed El-Tabarani)",
+  "author": "Ibn Saleem",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

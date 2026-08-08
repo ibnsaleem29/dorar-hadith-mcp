@@ -15,7 +15,7 @@
     "api",
     "sunnah"
   ],
-  "author": "أحمد الطبراني (Ahmed El-Tabarani)",
+  "author": "Ibn Saleem",
   "license": "MIT",
   "dependencies": {
     "connect-timeout": "^1.9.0",
