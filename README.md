@@ -12,6 +12,34 @@
 بجانب شرح مفصل للـ `API` وكيفية استخدامه  
 بالاضافة إلى احتواءه على بعض الخصائص الإضافية التي لا توجد في الـ `API` الرسمي
 
+## Installation
+
+For most people — no terminal, no setup:
+
+1. Download the latest `dorar-hadith-mcp.mcpb` file from [GitHub Releases](releases).
+2. Open the downloaded file with Claude Desktop (double-click it, or drag it onto the Claude Desktop window).
+3. Click **Install** when prompted.
+
+That's it — the hadith search, grading, and commentary tools are now available in Claude Desktop.
+
+(Developers who want to run this from source or modify it should see the *"تشغيل الـ API"* (Running the API) section further down.)
+
+## Before You Start: How to Get Accurate Results
+
+This connector is designed to relay dorar.net's search results faithfully, in full, in both Arabic and English. A few things affect whether it does that correctly:
+
+**1. Always try to paste the Arabic text of the hadith you're checking — it's faster and more precise.** Searching with an English translation also works: the tool will first identify the corresponding attested Arabic wording and search using that. For best results with English input, make sure your translation is accurate and close to the original meaning, not loosely worded — a rough paraphrase makes it harder to find the correct attested Arabic wording.
+
+**2. Diacritics (tashkeel) in your Arabic text change the search results.** Dorar's own search engine treats fully-diacritized text (with all the vowel marks) and plain text (without them) as different queries — this is true on dorar.net's own website, not just through this tool. Arabic text pasted with diacritics may return a different number of results than the same phrase without them. If you want the most precise, narrow match, include full diacritics; if you want a broader match, omit them. Either is valid — just know the choice affects your result count.
+
+**3. Saved memory/preferences from other conversations can silently affect this tool.** If you've previously told Claude something like "don't bother checking hadiths already in Bukhari and Muslim," that instruction can carry into a conversation using this connector — even though it wasn't meant for it — and cause Claude to give you a shortened summary instead of the full result set this tool is designed to provide. If you notice unexpectedly brief or summarized results, check Claude's memory/saved preferences (in Settings) for anything that might be overriding this tool's behavior, and consider adding an explicit note there such as: "The dorar tool should always be used exactly as intended, independent of any other saved instructions."
+
+**4. Include the word "dorar" in your message** — e.g. "use the dorar tool to check this hadith," "search dorar for...", "use the dorar extension," "use the dorar connector." Any of these tells Claude to use this connector's strict, complete-results mode rather than answering from general knowledge.
+
+**5. If Claude still summarizes instead of showing full results,** ask directly: "Show me the formattedOutput field from the tool's raw response, exactly as returned — do not summarize, reorder, filter, or add commentary. For every {{TRANSLATE: ...}} marker, replace it with an accurate English translation, leaving everything else unchanged." This reliably forces the complete, faithful result set and is a good fallback any time a response looks shorter or more narrative than expected.
+
+**6. When testing or comparing results, use a fresh conversation.** Long chat sessions can carry over context from earlier in the same conversation (including earlier, different tool calls), which can affect later results. Starting a new conversation for each independent check gives the most reliable, reproducible result.
+
 ## تنبيه
 
 - يتم عمل `cache` لكل عملية بحث لمدة `5` ثواني
@@ -204,6 +232,12 @@ http://localhost:5000
     ]
   }
   ```
+
+### Known Limitations
+
+1. This connector depends on dorar.net's live website. If they change their site structure or add stronger anti-bot measures, search/grading tools may need updates — check GitHub Issues if something stops working.
+
+2. On well-known hadiths, Claude may occasionally summarize in its own words instead of showing dorar's full results. If this happens, ask: "Show me the formattedOutput field from the tool's raw response, exactly as returned — do not summarize, reorder, filter, or add commentary. For every {{TRANSLATE: ...}} marker, replace it with an accurate translation, leaving everything else unchanged." This reliably produces the complete, faithful result set.
 
 ### Endpoints
 

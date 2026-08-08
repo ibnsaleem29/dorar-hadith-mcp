@@ -1,0 +1,43 @@
+{
+  "manifest_version": "0.2",
+  "name": "dorar-hadith-mcp",
+  "version": "1.0.0",
+  "description": "Search, retrieve, and grade Islamic hadith from dorar.net directly from Claude — text, grading (with an Arabic-to-English glossary), sources, and commentary. Tip: include the word 'dorar' in your question for full, strict results directly from dorar.net's Hadith Encyclopedia. For best accuracy, provide the hadith in Arabic.",
+  "author": {
+    "name": "Ibn Saleem"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": {}
+    }
+  },
+  "tools": [
+    { "name": "search_hadith_api", "description": "Search for hadiths using the Dorar.net API endpoint. This provides comprehensive hadith search with various filters." },
+    { "name": "search_hadith_site", "description": "Search for hadiths using the site data endpoint. Similar to API search but using different data source." },
+    { "name": "get_hadith_by_id", "description": "Get a specific hadith by its ID." },
+    { "name": "get_similar_hadiths", "description": "Get similar hadiths for a given hadith ID." },
+    { "name": "get_alternate_hadith", "description": "Get alternate sahih hadith for a given hadith ID." },
+    { "name": "get_usul_hadith", "description": "Get the original/root hadith for a given hadith ID." },
+    { "name": "get_hadith_sources", "description": "Get the original/root sources (usul) for a given hadith ID. Same data as get_usul_hadith, provided under a sources-focused name." },
+    { "name": "get_hadith_grading", "description": "Get a focused grading summary (hadith text, grade, explainGrade, hadithId) for a given hadith ID, with gradeEnglish resolved via the grading glossary (exact match only, never guessed)." },
+    { "name": "get_hadith_commentary", "description": "Get the sharh (commentary/explanation) for a given hadith ID by resolving its sharhMetadata and fetching the full commentary." },
+    { "name": "get_hadith_grading_consensus", "description": "Search for a hadith phrase and return each matching result from dorar.net faithfully, in dorar's own order, with gradeEnglish resolved per entry. Queries the specialist tab first, falling back to non-specialist only if specialist is empty (resultSource states which). Performs no grouping or consensus computation." },
+    { "name": "search_sharh", "description": "Search for sharh (explanations) of hadiths." },
+    { "name": "get_sharh_by_id", "description": "Get sharh (explanation) for a hadith by ID." },
+    { "name": "get_sharh_by_text", "description": "Get sharh (explanation) for a hadith by searching for specific text." },
+    { "name": "get_mohdith_info", "description": "Get information about a muhadith (hadith narrator) by ID." },
+    { "name": "get_book_info", "description": "Get information about a hadith book by ID." },
+    { "name": "get_books_data", "description": "Get list of all available hadith books with their IDs and names." },
+    { "name": "get_degrees_data", "description": "Get list of all hadith degrees (authenticity levels) with their IDs and names." },
+    { "name": "get_method_search_data", "description": "Get method search data for hadith filtering." },
+    { "name": "get_mohdith_data", "description": "Get list of all muhaddithun (hadith narrators) with their IDs and names." },
+    { "name": "get_rawi_data", "description": "Get list of all rawi (hadith transmitters) with their IDs and names." },
+    { "name": "get_zone_search_data", "description": "Get zone search data for geographic hadith filtering." }
+  ]
+}

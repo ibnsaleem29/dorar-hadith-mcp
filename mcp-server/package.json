@@ -21,7 +21,9 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "axios": "^1.6.0",
+    "html-entities": "^2.3.3",
+    "linkedom": "^0.14.25",
+    "node-cache": "^5.1.2",
     "zod": "^3.22.0"
   },
   "devDependencies": {

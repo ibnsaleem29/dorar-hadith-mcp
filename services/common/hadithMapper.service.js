@@ -2,6 +2,7 @@ const getSimilarHadithDorar = require('../../utils/getSimilarHadithDorar');
 const getHadithId = require('../../utils/getHadithId');
 const getAlternateHadithSahihDorar = require('../../utils/getAlternateHadithSahihDorar');
 const getUsulHadithDorar = require('../../utils/getUsulHadithDorar');
+const getAsbabWurudDorar = require('../../utils/getAsbabWurudDorar');
 const { parseHadithInfo } = require('../../utils/parseHadithInfo');
 const { parseHadithCategories } = require('../../utils/parseHadithCategories');
 
@@ -68,6 +69,7 @@ const mapSiteHadithBlock = (container, options = {}) => {
     ? getAlternateHadithSahihDorar(container)
     : undefined;
   const usulHadithDorar = getUsulHadithDorar(container);
+  const asbabWurudDorar = getAsbabWurudDorar(container);
   const hadithId = getHadithId(container);
   const categories = parseHadithCategories(container);
 
@@ -87,9 +89,11 @@ const mapSiteHadithBlock = (container, options = {}) => {
     hasSimilarHadith: !!similarHadithDorar,
     hasAlternateHadithSahih: !!alternateHadithSahihDorar,
     hasUsulHadith: !!usulHadithDorar,
+    hasAsbabWurud: !!asbabWurudDorar,
     similarHadithDorar,
     alternateHadithSahihDorar,
     usulHadithDorar,
+    asbabWurudDorar,
     ...addLinkMetadata({
       hadithId,
       similarHadithDorar,
