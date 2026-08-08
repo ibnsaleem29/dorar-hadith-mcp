@@ -16,6 +16,7 @@
 
 - يتم عمل `cache` لكل عملية بحث لمدة `5` ثواني
 - هناك حد للاستخدام: `100` عملية بحث في اليوم لكل `IP`
+- الـ `API` يعتمد على استخراج البيانات من `dorar.net` نفسه، وهو موقع محمي بواسطة `Cloudflare` التي تحظر عميل `fetch()` الأصلي في `Node.js` (وحدة `undici`) حتى مع إرسال نفس الـ `headers` تمامًا التي ينجح بها عميل آخر (تم التأكد من هذا تجريبيًا) — لذلك تم إعادة كتابة [`utils/fetchWithTimeout.js`](./utils/fetchWithTimeout.js) ليستخدم وحدتي `http`/`https` الأساسيتين في `Node.js` مباشرة بدلاً من `fetch()`، مع الحفاظ على نفس الواجهة الخارجية (`ok`/`status`/`text()`/`json()`) التي يعتمد عليها باقي الكود
 
 > يمكنك تعديلهم من ملف [config.js](./config/config.js)
 
@@ -73,6 +74,136 @@ http://localhost:5000
    ```
 
 ستجد هنا واجهة `Swagger UI` التي تتيح لك استكشاف جميع نقاط النهاية المتاحة واختبار الـ `API` مباشرة من المتصفح
+
+### MCP Server (Model Context Protocol)
+
+يتضمن المشروع `Server` خاص للـ `MCP` والذي سمح لأي `LLMs` الوصول المباشر إلى `API` الأحاديث  
+بالتالي يسمح لأدوات الذكاء الاصطناعي مثل `Claude` و `Copilot` بالبحث في الأحاديث والحصول على المعلومات بسهولة
+
+#### إعداد الـ MCP
+
+1. تأكد من تشغيل الـ `API`:
+
+   ```bash
+   npm start
+   ```
+
+2. انتقل إلى مجلد `mcp-server` وقم بتثبيت الـ `dependencies`:
+
+   ```bash
+   cd mcp-server
+   npm install
+   ```
+
+3. تشغيل `Server` الـ `MCP`:
+
+   ```bash
+   npm start
+   ```
+
+الآن بحسب الأداة التي تريد استخدامها مع `MCP` قم بإعدادها
+
+#### إعداد MCP مع VS Code Copilot
+
+قم بإنشاء مجلد يدعى `.vscode`  
+قم بإنشاء ملف `mcp.json` بداخله
+
+```json
+{
+  "servers": {
+    "dorar-hadith": {
+      "command": "node",
+      "args": ["./mcp-server/index.js"],
+      "env": {
+        "DORAR_API_BASE_URL": "http://localhost:5000/v1"
+      }
+    }
+  }
+}
+```
+
+الآن قم بتشغيل الـ `MCP` من خلال الضغط على `F1` ثم البحث عن `MCP: List Servers`  
+اختر `dorar-hadith` واضغط على `Enter`
+
+#### الأدوات المتاحة في MCP
+
+- `search_hadith_api` - البحث في الأحاديث عبر API
+- `search_hadith_site` - البحث في الأحاديث عبر الموقع
+- `get_hadith_by_id` - الحصول على حديث محدد
+- `get_similar_hadiths` - الحصول على أحاديث مشابهة
+- `get_alternate_hadith` - الحصول على الحديث الصحيح البديل
+- `get_usul_hadith` - الحصول على أصول الحديث
+- `search_sharh` - البحث في شروح الأحاديث
+- `get_sharh_by_id` - الحصول على شرح محدد
+- `get_sharh_by_text` - البحث عن شرح بالنص
+- `get_mohdith_info` - معلومات المحدث
+- `get_book_info` - معلومات الكتاب
+- `get_books_data` - قائمة جميع الكتب
+- `get_degrees_data` - قائمة درجات الأحاديث
+- `get_method_search_data` - بيانات طرق البحث
+- `get_mohdith_data` - قائمة المحدثين
+- `get_rawi_data` - قائمة الرواة
+- `get_zone_search_data` - بيانات مناطق البحث
+
+#### أدوات تقييم درجة الحديث (Grading Tools)
+
+تعتمد الأداتان `get_hadith_grading` و `get_hadith_grading_consensus` على ملف [`mcp-server/gradingGlossary.json`](./mcp-server/gradingGlossary.json)، وهو قاموس ثابت المصطلحات لمصطلحات علم الحديث (٢٢ مصطلحًا، عربي ← إنجليزي)، مثل `صحيح` → `Sahih` و `ضعيف` → `Da'if`، يُحمَّل مرة واحدة فقط عند تشغيل الخادم (وليس مع كل طلب). المطابقة تكون **حرفية دقيقة فقط** على الكلمة الأولى من نص الدرجة (بعد التقسيم عند أول فاصلة أو مسافة) — إن لم يوجد تطابق دقيق تُعاد القيمة `null` بدلاً من التخمين. هذا القاموس مخصص لمصطلحات الدرجة الثابتة فقط، وليس لترجمة نصوص `explainGrade` الحرة، والتي تبقى بالعربية كما هي.
+
+- **`get_hadith_sources`** - الحصول على المصادر الأصلية (الأصول) لحديث معيّن. نفس بيانات `get_usul_hadith` تمامًا، تحت اسم يركّز على "المصادر".
+
+  **Input:** `{ id: string }` — معرف الحديث (`hadithId`)
+
+  **Output:** نفس هيكل استجابة `/v1/site/hadith/usul/:id` كاملاً (حقول الحديث القياسية + `usulHadith: { sources: [{ source, chain, hadithText }], count }`)
+
+- **`get_hadith_grading`** - ملخص مركّز لدرجة حديث معيّن، مع محاولة ترجمة إنجليزية للمصطلح عبر `gradingGlossary.json`.
+
+  **Input:** `{ id: string }`
+
+  **Output:**
+  ```
+  {
+    hadith: string,
+    grade: string,
+    explainGrade: string,
+    hadithId: string,
+    gradeEnglish: string | null   // null إذا لم يوجد تطابق حرفي دقيق في القاموس
+  }
+  ```
+
+- **`get_hadith_commentary`** - الحصول على شرح (تعليق) حديث معيّن عبر معرف الحديث مباشرة (وليس معرف الشرح)، بطلب على خطوتين: `/site/hadith/:id` لقراءة `sharhMetadata.id`، ثم `/site/sharh/:id` لجلب الشرح الكامل.
+
+  **Input:** `{ id: string }` — معرف الحديث
+
+  **Output (بدون شرح متاح):** `{ hasCommentary: false }`
+
+  **Output (مع شرح متاح):** `{ hasCommentary: true, ... }` مع كل حقول الشرح الكاملة (`hadith`, `rawi`, `mohdith`, `book`, `numberOrPage`, `grade`, `takhrij`, `sharhMetadata`, ...)
+
+- **`get_hadith_grading_consensus`** - بحث عن عبارة حديثية (بحث `specialist`، مطابقة كل الكلمات `st=w`) وإرجاع كل نتيجة مطابقة كما هي من `dorar.net`، **بترتيب `dorar` نفسه دون أي تجميع أو تصنيف حسب الدرجة**. هذه الأداة استرجاع وترجمة أمينان فقط؛ لا تحسب ولا تُعيد أي حكم بـ"توافق" أو "تعاضد" أو "تواتر" بين النتائج — هذا الاستنتاج متروك بالكامل للقارئ عند مقارنة نص `hadith` والحقول الأخرى بنفسه.
+
+  **Input:**
+  ```
+  {
+    query: string,          // نص البحث (المتن)
+    max_results?: number    // الافتراضي 15 — يُقتطع محليًا من نتائج dorar، فلا يوجد معامل "length" فعلي في dorar.net
+  }
+  ```
+
+  **Output:**
+  ```
+  {
+    totalResults: number,     // عدد النتائج التي أرجعها dorar فعليًا قبل أي اقتطاع بـ max_results
+    returnedResults: number,  // عدد النتائج المُضمَّنة فعليًا بعد الاقتطاع
+    entries: [
+      {
+        hadith, rawi, mohdith, book, numberOrPage,
+        grade, explainGrade, takhrij, categories, hadithId,
+        hasSimilarHadith, hasAlternateHadithSahih, hasUsulHadith, hasSharhMetadata,
+        gradeEnglish   // null إذا لم يوجد تطابق حرفي دقيق في القاموس
+      },
+      ...
+    ]
+  }
+  ```
 
 ### Endpoints
 
