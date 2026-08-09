@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.2",
   "name": "dorar-hadith-mcp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Search, retrieve, and grade Islamic hadith from dorar.net directly from Claude — text, grading (with an Arabic-to-English glossary), sources, and commentary. Tip: include the word 'dorar' in your question for full, strict results directly from dorar.net's Hadith Encyclopedia. For best accuracy, provide the hadith in Arabic.",
   "author": {
     "name": "Ibn Saleem"
