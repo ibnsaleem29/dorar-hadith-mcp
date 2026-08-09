@@ -65,6 +65,7 @@ const FIELD_LABELS = {
   takhrij: "التخريج (Further references)",
   categories: "التصنيف الموضوعي (Subject categories)",
   options: "Dorar options",
+  reference: "Reference ID",
 };
 
 // Fixed, deterministic bilingual labels for dorar's per-result navigational
@@ -141,6 +142,14 @@ function formatHadithCard(entry, index) {
     .map(([, label]) => `- ${label}`);
   if (availableOptions.length) {
     lines.push(`**${FIELD_LABELS.options}:**`, ...availableOptions, ``);
+  }
+
+  // Not a Dorar-sourced field — an internal identifier for this result,
+  // needed so a follow-up request (e.g. "show the Hadith Sources under
+  // result 4") can be resolved to the right hadithId. Kept unobtrusive
+  // (small, code-formatted, un-translated) rather than a prominent field.
+  if (entry.hadithId) {
+    lines.push(`${FIELD_LABELS.reference}: \`${entry.hadithId}\``, ``);
   }
 
   return lines.join("\n");
@@ -646,7 +655,11 @@ Do not silently simplify the Dorar output merely because several results appear 
 // scoped to that message, not a standing mode for the whole conversation.
 // dorar-faithful-interface remains available as the full, example-rich prompt
 // for anyone who explicitly wants that level of detail regardless of wording.
-const SERVER_INSTRUCTIONS = `If the user's message contains the word "dorar", or phrases like "dorar tool", "dorar extension", "dorar connector", or "use dorar" — treat this as an explicit, exclusive request to answer using ONLY the dorar MCP tools for that specific answer. In this mode: for ANY grading, authenticity-check, or hadith-search request, you MUST call get_hadith_grading_consensus specifically — not search_hadith_api, not search_hadith_site, not any other tool — regardless of which tools happen to be pre-approved/auto-allowed in your settings; tool-approval status is never a reason to pick a different tool. get_hadith_grading_consensus is the only tool whose response text is already the complete, faithful, dorar-card-formatted result set, ready to present as-is — the other search tools return a different, thinner shape and must not be substituted. In this mode: do not reference, suggest, or pull in any other source (Shamela or otherwise); always query the specialist result set first (full page size), falling back to non-specialist only if specialist returns zero results, never merging the two; preserve every dorar result separately, never merge/deduplicate; translate fully into English for every field; match dorar's own card format (hadith/narrator/grading scholar/source/takhrij/categories); never add commentary, counts, or cross-result analysis; never compute or state a "consensus," "agreement," or similar verdict across results, under any phrasing. This exclusive mode applies only to that message — it does not carry over or restrict unrelated requests elsewhere in the conversation.
+const SERVER_INSTRUCTIONS = `When the user explicitly invokes Dorar or the Dorar tool, use get_hadith_grading_consensus by default.
+
+When Dorar is invoked, the formatted result returned by the Dorar tool is the complete display result. Reproduce it in full. Do not summarize, omit, reorder, or paraphrase any part of it. Preserve every Dorar option exactly as returned, including its existing Arabic label and English translation, and the Reference ID exactly as returned. Only fill the translation markers.
+
+If the user's message contains the word "dorar", or phrases like "dorar tool", "dorar extension", "dorar connector", or "use dorar" — treat this as an explicit, exclusive request to answer using ONLY the dorar MCP tools for that specific answer. In this mode: for ANY grading, authenticity-check, or hadith-search request, you MUST call get_hadith_grading_consensus specifically — not search_hadith_api, not search_hadith_site, not any other tool — regardless of which tools happen to be pre-approved/auto-allowed in your settings; tool-approval status is never a reason to pick a different tool. get_hadith_grading_consensus is the only tool whose response text is already the complete, faithful, dorar-card-formatted result set, ready to present as-is — the other search tools return a different, thinner shape and must not be substituted. In this mode: do not reference, suggest, or pull in any other source (Shamela or otherwise); always query the specialist result set first (full page size), falling back to non-specialist only if specialist returns zero results, never merging the two; preserve every dorar result separately, never merge/deduplicate; translate fully into English for every field; match dorar's own card format (hadith/narrator/grading scholar/source/takhrij/categories); never add commentary, counts, or cross-result analysis; never compute or state a "consensus," "agreement," or similar verdict across results, under any phrasing. This exclusive mode applies only to that message — it does not carry over or restrict unrelated requests elsewhere in the conversation.
 
 If the user's message does NOT contain any of those trigger words, use normal judgment: the dorar tools may still be used if clearly relevant to a hadith-grading question, but this is not an exclusivity requirement, and other sources/extensions remain available as usual.
 
@@ -676,7 +689,7 @@ const PROMPTS = [
 const TOOLS = [
   {
     name: "search_hadith_api",
-    description: "Search for hadiths using the Dorar.net API endpoint. This provides comprehensive hadith search with various filters. NOTE: for grading, authenticity-check, or 'is this hadith sound' requests, use get_hadith_grading_consensus instead — it returns full, faithful, dorar-card-formatted results; this tool returns a thinner shape not suited for those requests.",
+    description: "Search for hadiths using the Dorar.net API endpoint. This provides comprehensive hadith search with various filters. NOTE: for grading, authenticity-check, general hadith search/lookup, or 'is this hadith sound' requests, use get_hadith_grading_consensus instead — it returns full, faithful, dorar-card-formatted results; this tool returns a thinner shape not suited for those requests.",
     inputSchema: {
       type: "object",
       properties: {
@@ -697,7 +710,7 @@ const TOOLS = [
   },
   {
     name: "search_hadith_site",
-    description: "Search for hadiths using the site data endpoint. Similar to API search but using different data source. NOTE: for grading, authenticity-check, or 'is this hadith sound' requests, use get_hadith_grading_consensus instead — it returns full, faithful, dorar-card-formatted results; this tool returns a thinner shape not suited for those requests.",
+    description: "Search for hadiths using the site data endpoint. Similar to API search but using different data source. NOTE: for grading, authenticity-check, general hadith search/lookup, or 'is this hadith sound' requests, use get_hadith_grading_consensus instead — it returns full, faithful, dorar-card-formatted results; this tool returns a thinner shape not suited for those requests.",
     inputSchema: {
       type: "object",
       properties: {
@@ -773,7 +786,7 @@ const TOOLS = [
   },
   {
     name: "get_hadith_grading",
-    description: "Get a focused grading summary for a given hadith ID (grade, explainGrade, hadithId), plus gradeEnglish resolved via the fixed hadith-grading glossary (exact leading-term match only; null if no match). The tool's text response is already the complete, ready-to-display result card, in dorar's own format — present it as your entire answer for the search-results portion of your reply, exactly as given: do not summarize, rewrite, reorder, filter, or add commentary. Your only task is to fill in each {{TRANSLATE: ...}} marker with a complete, faithful English translation of its Arabic contents — never a summary or paraphrase, and never relabel the field (the label stays exactly \"English:\", never \"English (paraphrase):\" or similar). Raw fields are also returned via structuredContent for programmatic use, not for display.",
+    description: "Get a focused grading summary for a given hadith ID (grade, explainGrade, hadithId), plus gradeEnglish resolved via the fixed hadith-grading glossary (exact leading-term match only; null if no match). The tool's text response is already the complete, ready-to-display result card, in dorar's own format — present it as your entire answer for the search-results portion of your reply, exactly as given, including every Dorar option (with its existing Arabic label and English translation) and the Reference ID in each card: do not summarize, rewrite, reorder, filter, or add commentary. Your only task is to fill in each {{TRANSLATE: ...}} marker with a complete, faithful English translation of its Arabic contents — never a summary or paraphrase, and never relabel the field (the label stays exactly \"English:\", never \"English (paraphrase):\" or similar). Raw fields are also returned via structuredContent for programmatic use, not for display.",
     inputSchema: {
       type: "object",
       properties: {
@@ -795,7 +808,7 @@ const TOOLS = [
   },
   {
     name: "get_hadith_grading_consensus",
-    description: "THIS IS THE DEFAULT AND CORRECT TOOL for any hadith grading, authenticity-check, or 'is this hadith real/sound' request — use this tool instead of search_hadith_api or search_hadith_site for those requests, regardless of which tools are pre-approved/auto-allowed; approval status is never a reason to pick a different tool. Search for a hadith phrase (all-words match) and return each matching result from dorar.net's site search, faithfully, in dorar's own order. Always queries the specialist tab first; if specialist has any results at all, those are used exclusively (never merged with non-specialist). Only when specialist is genuinely empty does it fall back to the non-specialist tab. This tool performs no grouping, bucketing, or consensus/corroboration computation of any kind — it is pure retrieval and translation. The tool's text response is already the complete, dorar-card-formatted result set, in dorar's own order — present it as your entire answer for the search-results portion of your reply, exactly as given: do not summarize, rewrite, reorder, filter, or add commentary. Your only task is to fill in each {{TRANSLATE: ...}} marker with a complete, faithful English translation of its Arabic contents — never a summary, paraphrase, or interpretation, and never relabel the field (the label stays exactly \"English:\", never \"English (paraphrase):\" or similar). Raw per-entry structured data — resultSource ('specialist' or 'non-specialist'), totalResults, returnedResults, and entries with every field (hadith, rawi, mohdith, book, numberOrPage, grade, explainGrade, takhrij, categories, hadithId, hasSimilarHadith, hasAlternateHadithSahih, hasUsulHadith, hasAsbabWurud, hasSharhMetadata, gradeEnglish) — is also returned via structuredContent for programmatic use, not for display.",
+    description: "THIS IS THE DEFAULT AND CORRECT TOOL for any hadith grading, authenticity-check, general hadith search/lookup, or 'is this hadith real/sound' request — use this tool instead of search_hadith_api or search_hadith_site for those requests, regardless of which tools are pre-approved/auto-allowed; approval status is never a reason to pick a different tool. Search for a hadith phrase (all-words match) and return each matching result from dorar.net's site search, faithfully, in dorar's own order. Always queries the specialist tab first; if specialist has any results at all, those are used exclusively (never merged with non-specialist). Only when specialist is genuinely empty does it fall back to the non-specialist tab. This tool performs no grouping, bucketing, or consensus/corroboration computation of any kind — it is pure retrieval and translation. The tool's text response is already the complete, dorar-card-formatted result set, in dorar's own order — present it as your entire answer for the search-results portion of your reply, exactly as given, including every Dorar option (with its existing Arabic label and English translation) and the Reference ID in each card: do not summarize, rewrite, reorder, filter, or add commentary. Your only task is to fill in each {{TRANSLATE: ...}} marker with a complete, faithful English translation of its Arabic contents — never a summary, paraphrase, or interpretation, and never relabel the field (the label stays exactly \"English:\", never \"English (paraphrase):\" or similar). Raw per-entry structured data — resultSource ('specialist' or 'non-specialist'), totalResults, returnedResults, and entries with every field (hadith, rawi, mohdith, book, numberOrPage, grade, explainGrade, takhrij, categories, hadithId, hasSimilarHadith, hasAlternateHadithSahih, hasUsulHadith, hasAsbabWurud, hasSharhMetadata, gradeEnglish) — is also returned via structuredContent for programmatic use, not for display.",
     inputSchema: {
       type: "object",
       properties: {
