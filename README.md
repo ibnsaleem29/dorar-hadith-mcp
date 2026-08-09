@@ -29,9 +29,9 @@ This connector is designed to relay dorar.net's search results faithfully, in fu
                    **share the entire result using the dorar tool** to find the hadith _whoever lies upon me...._
 
 
-4. Saved memory/preferences from other conversations can silently affect this tool. If you've previously told Claude something like **"don't bother checking ahadeeth already in Bukhari and Muslim," then that instruction can carry into a conversation using this connector and cause Claude to give you a shortened summary instead of the full result**. If you notice unexpectedly brief or summarized results, check Claude's memory/saved preferences (in Settings) for anything that might be overriding this tool's behaviour, and consider adding an explicit note there such as: "**The dorar tool should always be used exactly as intended, independent of any other saved instructions."** or delete your conflicting memory instructions so this tool can function unhindered 
+3. Saved memory/preferences from other conversations can silently affect this tool. If you've previously told Claude something like **"don't bother checking ahadeeth already in Bukhari and Muslim," then that instruction can carry into a conversation using this connector and cause Claude to give you a shortened summary instead of the full result**. If you notice unexpectedly brief or summarized results, check Claude's memory/saved preferences (in Settings) for anything that might be overriding this tool's behaviour, and consider adding an explicit note there such as: "**The dorar tool should always be used exactly as intended, independent of any other saved instructions."** or delete your conflicting memory instructions so this tool can function unhindered 
 
-5.It's always better to use a new chat for different ahadith. Long chat sessions can carry over context from earlier in the same conversation (including earlier, different tool calls), which can affect later results.
+4.It's always better to use a new chat for different ahadith. Long chat sessions can carry over context from earlier in the same conversation (including earlier, different tool calls), which can affect later results.
 
 ## See It In Action
 
