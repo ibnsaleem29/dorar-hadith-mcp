@@ -6,7 +6,7 @@ A free MCP connector for searching and researching Hadith through [Dorar.net](ht
 
 For most people — no terminal, no setup:
 
-1. Download the latest `dorar-hadith-mcp.mcpb` file from [GitHub Releases](https://github.com/ibnsaleem29/dorar-hadith-mcp/releases).
+1. Download the latest `dorar-hadith-mcp-v2.0.mcpb` file from [GitHub Releases](https://github.com/ibnsaleem29/dorar-hadith-mcp/releases).
 2. Open the downloaded file with Claude Desktop (double-click it, or drag it onto the Claude Desktop window).
 3. Click **Install** when prompted.
 
