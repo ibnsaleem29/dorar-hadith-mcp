@@ -8,7 +8,7 @@ Just use your normal claude desktop's chat window and ask away. Claude with the 
 
 For most people — no terminal, no setup:
 
-1. Download the latest `dorar-hadith-mcp-v3.0` file from [GitHub Releases](https://github.com/ibnsaleem29/dorar-hadith-mcp/releases).
+1. Download the latest `dorar-hadith-mcp-v3.0.mcpb` file from [GitHub Releases](https://github.com/ibnsaleem29/dorar-hadith-mcp/releases).
 2. Open the downloaded file with Claude Desktop (double-click it, or drag it onto the Claude Desktop window).
 3. Click **Install** when prompted.
 
