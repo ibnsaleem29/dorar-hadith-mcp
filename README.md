@@ -1,6 +1,8 @@
 # Dorar.net Hadith MCP
 
-A free MCP connector for searching and researching Hadith through [Dorar.net](https://dorar.net) directly inside Claude Desktop.
+Use this free Claude extension to search and research Hadith through [Dorar.net](https://dorar.net/) directly in Claude Desktop. Search for Hadith, explore isnād [chain of narration] and Takhrīj, read commentaries (Sharḥ and explanations), check scholarly grading of ahadeeth, and more both in Arabic and English.
+
+Just use your normal claude desktop's chat window and ask away. Claude with the help of this extension will give you the aforementioned results in a carefully drafted template.
 
 ## Installation
 
@@ -18,7 +20,7 @@ This connector is designed to relay dorar.net's search results faithfully, in fu
 
 1. **Always try to paste the Arabic text of the hadith you're checking** - it's faster & more precise. Searching with an English translation also works: the tool will first identify the corresponding attested Arabic wording and search using it. **For best results with English input, make sure your translation is accurate and close to the original meaning, not loosely worded** coz a rough paraphrase makes it harder to find the correct attested Arabic wording.
 
-2. IMP --> **Always** append this prompt [in your chat] for the correct response  **e.g. "**share the entire result using dorar tool** to check this hadith,**" OR **"Share the entire result using dorar for ____ "** [updated as of 9th Aug,2026]
+2. IMP --> **Always** append the prompt " **using dorar**" or "**use dorar tool**" [in your chat] for the correct response  **e.g. "**share the entire result using dorar tool** to check this hadith,**" OR **"Share the entire result using dorar for ____ "** 
 
 3. Saved memory/preferences from other conversations can silently affect this tool. If you've previously told Claude something like **"don't bother checking hadiths already in Bukhari and Muslim," that instruction can carry into a conversation using this connector — even though it wasn't meant for it — and cause Claude to give you a shortened summary instead of the full result**. If you notice unexpectedly brief or summarized results, check Claude's memory/saved preferences (in Settings) for anything that might be overriding this tool's behaviour, and consider adding an explicit note there such as: "**The dorar tool should always be used exactly as intended, independent of any other saved instructions."** or delete your conflicting memory instructions so this tool can function unhindered 
 
