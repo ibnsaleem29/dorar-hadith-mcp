@@ -26,7 +26,7 @@ This connector is designed to relay dorar.net's search results faithfully, in fu
 
 1. **Always try to paste the Arabic text of the hadith you're checking** - it's faster &  precise. Searching with an English translation also works:  **For best results with English input, make sure your translation is accurate and close to the original hadith and not loosely worded** because a rough paraphrase makes it harder to find the correct attested Arabic wording.
 
-2. IMP --> **Always** append the prompt/ wording "**using dorar**" **or using the dorar tool**"  [in your chat] for the correct response  It will give you everything with this prompt [authenticity, number of books this hadith is found in, grading by each scholar, commentary options, etc]. You don't have to type anything extra. 
+2. IMP --> **Always** append the prompt/ wording "**using dorar**" **or using the dorar tool**"  [in your chat] for the correct response  It will give you everything with this prompt [authenticity, number of books this hadith is found in, grading by each scholar, commentary options, etc]. You don't have to type anything extra. Scroll down to see the screenshots 
 
                    examples 
 
