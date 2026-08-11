@@ -2,7 +2,7 @@
 
 Use this free Claude extension to search and research ahadith through [Dorar.net](https://dorar.net/) directly in Claude Desktop [also free to use]. Search for Hadith, explore isnād [chain of narration] and Takhrīj, read commentaries (Sharḥ and explanations), check scholarly grading of ahadeeth, and more in Arabic, English & any language of your choice.
 
-Just use your normal claude desktop's chat window and ask away. Rest assured, the tool is strictly restricted from self interpreting results and instead gives you the exact result as it would appear on the scholarly run dorar.net website so you don't have to worry about ai interference. 
+Just use your normal claude desktop's chat window and ask away. **Rest assured, the tool is strictly restricted from self interpreting results and instead gives you the exact result as it would appear on the scholarly run dorar.net website so you don't have to worry about ai interference.** 
 
 ## Installation
 
