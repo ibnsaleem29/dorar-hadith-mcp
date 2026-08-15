@@ -1,4 +1,4 @@
-# Hadith Checker [Dorar.net] — Research & Analyse Hadith in Claude
+# Hadith Checker — Research & Analyse Hadith in Claude
 
 Use this free Claude extension to search and research ahadith through [Dorar.net](https://dorar.net/) directly in Claude Desktop [also free to use]. Search for Hadith, explore isnād [chain of narration] and Takhrīj, read commentaries (Sharḥ and explanations), check scholarly grading of ahadeeth, and more in Arabic, English & any language of your choice.
 
