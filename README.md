@@ -1,10 +1,19 @@
 # Hadith Checker — Research & Analyse Hadith in Claude
 
+
+<img width="1392" height="557" alt="image" src="https://github.com/user-attachments/assets/4927b7bd-2628-404f-a943-3dc87aff8bf8" />
+
+
+
+.
+
+
 Use this free Claude extension to search and research ahadith through [Dorar.net](https://dorar.net/) directly in Claude Desktop [also free to use]. Search for Hadith, explore isnād [chain of narration] and Takhrīj, read commentaries (Sharḥ and explanations), check scholarly grading of ahadeeth, and more in Arabic, English & any language of your choice.
 
 Just use your normal claude desktop's chat window and ask away. **Rest assured, the tool is strictly restricted from self interpreting results and instead gives you the exact result as it would appear on the scholarly run dorar.net website so you don't have to worry about ai interference.** 
 
-## Installation
+# Installation
+
 
 For most people — no terminal, no setup:
 
@@ -20,7 +29,8 @@ For most people — no terminal, no setup:
 
 **Note**: **After completing the installation, exit the claude's desktop app fully and restart the app for the extension to function properly**
 
-###  **Before You Start: How to Get Accurate Results**
+##  **Before You Start: How to Get Accurate Results**
+
 
 This connector is designed to relay dorar.net's search results faithfully, in full, in both Arabic and English but it can also translate/reply in your choice of language [malay, urdu, bangla, italian, turkish etc] A few things affect whether it does that correctly:
 
@@ -40,20 +50,23 @@ This connector is designed to relay dorar.net's search results faithfully, in fu
 4.It's always better to use a new chat for different ahadith. Long chat sessions can carry over context from earlier in the same conversation (including earlier, different tool calls), which can affect later results.
 
 
-## See It In Action
+# See It In Action
+
 
 
 
 
 <img width="1040" height="1524" alt="image" src="https://github.com/user-attachments/assets/7fffe823-6647-4061-bc45-399a9102358e" />
 
+.
 
 <img width="1058" height="930" alt="image" src="https://github.com/user-attachments/assets/67ee6450-00eb-4290-b2c9-08a750fe0567" />
 
 
+.
 
-## Alternatively check out the same extension for Chrome/Opera/Edge/Brave Browsers: 
----
+# Alternatively check out the same extension for Chrome/Opera/Edge/Brave Browsers: 
+
 
 
 
@@ -64,7 +77,8 @@ This connector is designed to relay dorar.net's search results faithfully, in fu
 Link: https://chromewebstore.google.com/detail/hadith-checker-english-ar/oodkfbfpceiinidodofnhgoabjmpifco?authuser=2&hl=en-GB
 
 
-**Github repo**: https://github.com/ibnsaleem29/hadith-checker/releases
+### **Github repo**: https://github.com/ibnsaleem29/hadith-checker/releases
+
 
 
 ## Source
@@ -74,5 +88,7 @@ Hadith data is retrieved from [Dorar.net](https://dorar.net).
 ## License
 
 MIT
+Developed by Ibn Saleem — [www.fahmalhadeeth.com](https://www.fahmalhadeeth.com)
+
 
 
