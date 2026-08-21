@@ -52,6 +52,19 @@ This connector is designed to relay dorar.net's search results faithfully, in fu
 
 
 
+## Alternatively check out the same extension for Chrome/Opera/Edge/Brave Browsers: 
+---
+
+
+
+[<img width="861" height="295" alt="Available in the Chrome Web Store" src="https://github.com/user-attachments/assets/1fb5d228-8a85-4437-a792-f329e9197e09" />](https://chromewebstore.google.com/detail/hadith-checker-english-ar/oodkfbfpceiinidodofnhgoabjmpifco?authuser=2&hl=en-GB)
+
+
+
+Link: https://chromewebstore.google.com/detail/hadith-checker-english-ar/oodkfbfpceiinidodofnhgoabjmpifco?authuser=2&hl=en-GB
+
+
+**Github repo**: https://github.com/ibnsaleem29/hadith-checker/releases
 
 
 ## Source
